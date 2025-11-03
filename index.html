@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aniruddha Ghatage - Portfolio</title>
+    
+    <!-- 1. Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Load React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- 3. Load Babel (for compiling JSX in the browser) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- 4. Load Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- 5. Global Styles (from our React app) -->
+    <style>
+        :root {
+            --vscode-bg: #000000;
+            --vscode-sidebar: #000000;
+            --vscode-activitybar: #000000;
+            --vscode-text: #FFFFFF;
+            --vscode-blue: #0A84FF;
+            --vscode-border: #FFFFFF;
+            --vscode-tab-active: #000000;
+            --vscode-tab-inactive: #000000;
+        }
+        body { font-family: 'Inter', sans-serif; overflow: hidden; }
+        .fira-code { font-family: 'Fira Code', monospace; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #222; }
+        ::-webkit-scrollbar-thumb { background: #777; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #999; }
+        .grid-cols-26 { grid-template-columns: repeat(26, minmax(0, 1fr)); }
+    </style>
+</head>
+<body class="bg-black">
+    
+    <!-- This is where our React app will be "mounted" -->
+    <div id="root"></div>
+
+    <!-- 6. Our Entire React App (written in JSX) -->
+    <script type="text/babel">
+        // All the code from portfolio_react_vscode.jsx is pasted here
+
+        const { useState, useEffect, useMemo } = React;
+
+        // --- Data ---
+        const portfolioData = {
+          projects: {
+            'ai-fraud': {
+              id: 'ai-fraud',
+              title: 'AI_Fraud_Detection.py',
+              icon: 'python',
+              name: 'AI-Powered Fraud Call Detection Model',
+              description: 'An end-to-end machine learning project to classify phone call transcripts as "Fraud" or "Legitimate."',
+              features: [
+                { name: 'Data Generation', detail: 'Created a large, custom dataset of over 800+ call transcripts covering 7 distinct scam categories.' },
+                { name: 'Iterative Balancing', detail: 'Meticulously balanced the dataset to ensure a 50/50 split and balanced each scam category.' },
+                { name: 'Model Improvement', detail: 'Iteratively improved the dataset by adding challenging counter-examples (e.g., legit calls with "OTP") to fix blind spots.' },
+                { name: 'Advanced Feature Engineering', detail: 'Enhanced model intelligence with Sentiment Analysis (VADER) and N-grams.' },
+                { name: 'Final Model', detail: 'Trained a high-performance Random Forest model (V5) with significantly improved accuracy, precision, and recall.' },
+              ],
+              techStack: {
+                'Language': 'Python',
+                'Environment': 'Google Colab',
+                'Data_Manipulation': 'Pandas',
+                'Machine_Learning': 'Scikit-learn (RandomForestClassifier, Pipeline)',
+                'Text_Preprocessing': 'NLTK',
+                'Feature_Engineering': 'VADER (vaderSentiment)',
+                'Model_Storage': 'Joblib',
+              },
+            },
+            'connect-platform': {
+              id: 'connect-platform',
+              title: 'Connect_Platform.jsx',
+              icon: 'react',
+              name: 'Connect: Linking talent with excellence',
+              description: 'A comprehensive web platform designed to bridge the gap between aspiring learners (mentees) and experienced professionals (mentors). It provides a centralized hub where mentees can discover mentors, submit projects for expert review, and access exclusive webinars and workshops.',
+              appUrl: 'https://connect-ruddy-five.vercel.app/',
+              features: [
+                'Mentor/Mentee Discovery',
+                'Project Submission & Review System',
+                'Webinar & Workshop Access',
+                'Community Discussion Forum',
+                'Robust Profile Management',
+              ],
+              techStack: {
+                'Frontend': 'React.js, Tailwind CSS',
+                'Routing': 'React Router',
+                'Authentication': 'Firebase Authentication',
+                'Database': 'Neon DB (PostgreSQL)',
+                'Backend': 'Node.js (likely with Express.js)',
+              },
+            },
+            'blood-group-cnn': {
+              id: 'blood-group-cnn',
+              title: 'Blood_Group_CNN.py',
+              icon: 'python',
+              name: 'Blood Group Detection Using Fingerprint',
+              description: 'An ML-based system using a Convolutional Neural Network (CNN) to detect blood groups from fingerprints. This project features a real-time interface for efficient processing, with the aim of building an optimized model to enhance accuracy and reliability in blood group detection.',
+              techStack: {
+                'Language': 'Python',
+                'ML_Frameworks': 'TensorFlow, Keras',
+                'Image_Processing': 'OpenCV',
+              },
+            },
+            'raigad-vr': {
+              id: 'raigad-vr',
+              title: 'Raigad_VR.cs',
+              icon: 'csharp',
+              name: 'Ancient Fort “Raigad” in Virtual Reality',
+              description: 'This project aims to create an interactive virtual exploration experience of the historic Raigad Fort. Users can navigate a detailed 3D environment, including key landmarks like the Balekilla, Mena Darwaja, and Jagdishwari Temple. The experience incorporates player movement, interactive information panels, historical audio narration, and ambient soundscapes to provide an immersive and educational tour.',
+              techStack: {
+                'Platform': 'Unity',
+                'Scripting': 'C#',
+                '3D_Modeling': 'Blender',
+              },
+            },
+          },
+          skills: {
+            'Languages': ['Python', 'SQL', 'Java', 'JavaScript'],
+            'Frameworks': ['FastAPI', 'TensorFlow', 'Pandas', 'Numpy', 'PyTorch', 'Scikit-learn', 'Spring Boot', 'Node.js', 'React.js'],
+            'Platforms_Tools': ['Jupyter Notebook', 'Visual Studio Code', 'Vercel', 'Render', 'Neon DB', 'Firebase', 'GitHub'],
+            'Soft_Skills': ['Excellent Communication', 'Team Leadership', 'Critical Thinking'],
+          },
+          education: [
+            {
+              degree: 'B.Tech in Computer Science (AI/ML)',
+              institution: 'DY Patil College of Engineering & Technology, Kolhapur',
+              focus: 'Machine Learning, Data Science, Fullstack Development',
+              details: '2022 - Pursuing (CGPA: 7.48/10)',
+            },
+            {
+              degree: 'HSC (PCMB)',
+              institution: 'The New College, Kolhapur',
+              details: '2020 - 2022 (Percentage: 63.33%)',
+            },
+            {
+              degree: 'SSC',
+              institution: 'Shrimant Jaysignrao Ghatage Highschool, Kagal',
+              details: '2020 (Percentage: 93.40%)',
+            },
+          ],
+          experience: {
+            internships: [
+              'Cisco VIP [Cybersecurity] (Virtual)',
+              'IIT Bombay [React Full stack] (EdTech Internship)',
+              'Eduskills-AICTE [Cloud Computing] (Virtual)',
+            ],
+            certifications: [
+              'A2 Level German Language',
+              'AWS Academy Graduate - AWS Academy (Cloud Architecting & Cloud Foundations)',
+            ],
+          },
+          leetcode: {
+            totalSolved: 304,
+            rating: 1568,
+            easy: 87,
+            medium: 181,
+            hard: 36,
+            contests: 49,
+            profileUrl: 'https://leetcode.com/u/AniruddhaLeet/',
+          },
+          links: {
+            linkedIn: 'https://www.linkedin.com/in/aniruddha-ghatage-b1a925266',
+            github: 'https://github.com/Aniruddha6525',
+            leetcode: 'https://leetcode.com/u/AniruddhaLeet/',
+          },
+          contact: {
+            email: 'ghatageaniruddha@gmail.com',
+            phone: '+91 7887404983',
+          },
+        };
+
+        // --- Icon Component ---
+        const Icon = ({ name, className = 'w-6 h-6' }) => {
+          const icons = {
+            // VS Code UI Icons
+            files: ( // Explorer
+              <svg viewBox="0 0 16 16" fill="currentColor" className={className}><path d="M11.5 0H4.5A1.5 1.5 0 003 1.5v13A1.5 1.5 0 004.5 16h7a1.5 1.5 0 001.5-1.5v-10L11.5 0zM11.125 1.5L13.5 3.875V14.5a.5.5 0 01-.5.5h-7a.5.5 0 01-.5-.5v-13a.5.5 0 01.5-.5h6.625z"/><path d="M10.5 1.5V4h2.5L10.5 1.5z"/></svg>
+            ),
+            account: ( // Account
+              <svg viewBox="0 0 16 16" fill="currentColor" className={className}><path d="M12.5 8c0 2.5-1.5 4.5-3.5 4.5S5.5 10.5 5.5 8s1.5-4.5 3.5-4.5S12.5 5.5 12.5 8zM9 8c0-1.4-1.1-2.5-2.5-2.5S4 6.6 4 8s1.1 2.5 2.5 2.5S9 9.4 9 8z"/><path d="M12.5 8c0-1.1.9-2 2-2s2 .9 2 2v.5c0 1.9-1.3 3.4-3 3.8V12c.3 0 .5-.2.5-.5s-.2-.5-.5-.5H9.3c.2-.3.3-.6.3-1c0-.6-.4-1-1-1s-1 .4-1 1c0 .4.1.7.3 1H6c-.3 0-.5.2-.5.5s.2.5.5.5v2.3c-1.7-.4-3-1.9-3-3.8V8c0-1.1.9-2 2-2s2 .9 2 2z"/></svg>
+            ),
+            'settings-gear': ( // Settings
+              <svg viewBox="0 0 16 16" fill="currentColor" className={className}><path d="M13.8 6.2h-1.6V4.6h1.6c.1-1-.2-1.9-.8-2.5s-1.6-.9-2.5-.8h-1.6v1.6H6.2V1.2H4.6c-1 .1-1.9.2-2.5.8s-.9 1.6-.8 2.5v1.6h1.6v1.6H1.2c-.1 1 .2 1.9.8 2.5s1.6.9 2.5.8v1.6h1.6v1.6h1.6v1.6h1.6v-1.6h1.6V13h1.6c1-.1 1.9-.2 2.5-.8s.9-1.6.8-2.5V8.8h-1.6V7.2v-1zM12 8.8v1.6h1.6v.2c0 .5-.1.9-.3 1.2s-.7.5-1.2.3v.2h-1.6v1.6H8.8V13v-1.6H7.2v1.6H5.6v-1.6H4V13v.2c-.5 0-.9-.1-1.2-.3s-.5-.7-.3-1.2v-.2H1.6V8.8H4V7.2H1.6V7c0-.5.1-.9.3-1.2s.7-.5 1.2-.3v-.2h1.6V4H7.2v1.6h1.6V4h1.6v1.6H12v.2c.5 0 .9.1 1.2.3s.5.7.3 1.2v.2H12z"/><path d="M8 5C6.3 5 5 6.3 5 8s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3zm0 4.5c-.8 0-1.5-.7-1.5-1.5S7.2 6.5 8 6.5s1.5.7 1.5 1.5S8.8 9.5 8 9.5z"/></svg>
+            ),
+            x: ( // Close
+              <svg viewBox="0 0 16 16" fill="currentColor" className={className}><path d="M9.4 8l3.3 3.3-1.4 1.4-3.3-3.3-3.3 3.3-1.4-1.4L6.6 8 3.3 4.7l1.4-1.4L8 6.6l3.3-3.3 1.4 1.4L9.4 8z"/></svg>
+            ),
+            'chevron-down': (
+              <svg viewBox="0 0 16 16" fill="currentColor" className={className}><path fillRule="evenodd" d="M4.646 6.646a.5.5 0 0 1 .708 0L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/></svg>
+            ),
+
+            // Activity Bar Icons
+            skills: (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.7-3.7a1 1 0 0 0 0-1.4l-1.6-1.6a1 1 0 0 0-1.4 0l-3.7 3.7zM7 13l-6 6M12 18.7l7-7M10.3 12.7 4.9 18.1s-.5-.8-1.5-1.5-1.5-1.5-1.5-1.5l5.4-5.4"/></svg>
+            ),
+            leetcode: (
+              <svg viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M13.483 0a1.358 1.358 0 0 0-1.358 1.358 1.358 1.358 0 0 0 1.358 1.357 1.358 1.358 0 0 0 1.357-1.357A1.358 1.358 0 0 0 13.483 0zM8.919 4.31a1.358 1.358 0 1 0 0 2.717 1.358 1.358 0 0 0 0-2.717zM18.046 4.31a1.358 1.358 0 1 0 0 2.717 1.358 1.358 0 0 0 0-2.717zM13.483 8.619a1.358 1.358 0 1 0 0 2.717 1.358 1.358 0 0 0 0-2.717zM8.919 12.929a1.358 1.358 0 1 0 0 2.717 1.358 1.358 0 0 0 0-2.717zM18.046 12.929a1.358 1.358 0 1 0 0 2.717 1.358 1.358 0 0 0 0-2.717zM13.483 17.238a1.358 1.358 0 1 0 0 2.717 1.358 1.358 0 0 0 0-2.717zM8.919 21.548a1.358 1.358 0 1 0 0 2.717 1.358 1.358 0 0 0 0-2.717zM18.046 21.548a1.358 1.358 0 1 0 0 2.717 1.358 1.358 0 0 0 0-2.717z"/></svg>
+            ),
+            experience: (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            ),
+            education: (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.084a1 1 0 0 0 0 1.838l8.57 3.908a2 2 0 0 0 1.66 0l8.59-3.908z"/><path d="M6 12v5c0 1.66 3 3 6 3s6-1.34 6-3v-5"/><path d="M18 12.4v10.2"/></svg>
+            ),
+            extensions: ( // Added extensions icon
+              <svg viewBox="0 0 16 16" fill="currentColor" className={className}><path d="M13.5 1h-11v1.5h11V1zm-11 3.5v3h-2v-3h2zm11 0v3h2v-3h-2zm-9 5v3H1v-3h2.5zm5 0v3h2.5v-3H9zm-5.5-5v3h3v-3h-3zm5 0v3h3v-3h-3zm-1.5 8.5v-3h-3v3h3z"/></svg>
+            ),
+
+            // File Type Icons
+            python: (
+              <svg viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M20.5 14.9C21.2 16.1 21.3 17.6 20.8 18.9C20.3 20.2 19.3 21.1 18 21.5C16.7 21.8 15.3 21.6 14.1 20.9C12.9 20.3 12.1 19.3 11.8 18C11.4 16.7 11.6 15.3 12.3 14.1C12.9 12.9 13.9 12.1 15.2 11.8C15.8 11.6 16.5 11.6 17.2 11.7C17.8 11.8 18.4 12 18.9 12.3C18.8 12.2 18.7 12.1 18.6 12C18.2 11.5 17.9 11 17.7 10.4C17.6 10.2 17.5 10.1 17.5 10C17.5 9.9 17.4 9.8 17.4 9.7C17.1 9 17 8.2 17 7.5C17 6.2 17.5 5 18.4 4.1C19.3 3.2 20.5 2.7 21.8 2.7C23.1 2.7 24.3 3.2 25.2 4.1C26.1 5 26.6 6.2 26.6 7.5C26.6 8.8 26.1 10 25.2 10.9C24.3 11.8 23.1 12.3 21.8 12.3C21.1 12.3 20.4 12.1 19.8 11.8C19.6 11.7 19.4 11.6 19.2 11.5C19.1 11.5 19 11.4 18.9 11.4C18.6 11.2 18.3 11 18 10.7C17.9 10.7 17.8 10.6 17.7 10.5C17.5 10.7 17.3 11 17.2 11.2C17.1 11.4 17.1 11.6 17 11.8C17.3 12.3 17.7 12.7 18.2 13C18.3 13.1 18.4 13.2 18.5 13.2C19.1 13.6 19.8 13.8 20.5 14.9M15.2 12.8C14.1 13.3 13.3 14.1 12.8 15.2C12.3 16.3 12.2 17.5 12.5 18.7C12.8 19.8 13.6 20.7 14.7 21.1C15.8 21.6 17 21.6 18.2 21.1C19.3 20.6 20.1 19.8 20.6 18.7C21.1 17.6 21.1 16.4 20.8 15.2C20.5 14.1 19.7 13.2 18.6 12.8C17.6 12.3 16.3 12.3 15.2 12.8M18 10C18.4 10.4 18.8 10.7 19.2 11C19.3 11 19.4 11.1 19.5 11.1C19.8 11.3 20.1 11.5 20.4 11.6C20.5 11.6 20.6 11.7 20.7 11.7C21.1 11.9 21.4 12 21.8 12C22.7 12 23.6 11.6 24.3 10.9C24.9 10.3 25.3 9.4 25.3 8.5C25.3 7.6 24.9 6.8 24.3 6.1C23.6 5.5 22.7 5.1 21.8 5.1C20.9 5.1 20 5.5 19.4 6.1C18.7 6.8 18.3 7.6 18.3 8.5C18.3 8.9 18.4 9.2 18.5 9.6C18.5 9.7 18.5 9.7 18.5 9.8C18.5 9.8 18.5 9.9 18.5 9.9C18.5 9.9 18.5 10 18.5 10C18.4 10 18.4 10 18.4 10C18.3 10 18.2 10 18 10M3.5 9.1C2.8 7.9 2.7 6.4 3.2 5.1C3.7 3.8 4.7 2.9 6 2.5C7.3 2.2 8.7 2.4 9.9 3.1C11.1 3.7 11.9 4.7 12.2 6C12.6 7.3 12.4 8.7 11.7 9.9C11.1 11.1 10.1 11.9 8.8 12.2C8.2 12.4 7.5 12.4 6.8 12.3C6.2 12.2 5.6 12 5.1 11.7C5.2 11.8 5.3 11.9 5.4 12C5.8 12.5 6.1 13 6.3 13.6C6.4 13.8 6.5 13.9 6.5 14C6.5 14.1 6.6 14.2 6.6 14.3C6.9 15 7 15.8 7 16.5C7 17.8 6.5 19 5.6 19.9C4.7 20.8 3.5 21.3 2.2 21.3C0.9 21.3 -0.3 20.8 -1.2 19.9C-2.1 19 -2.6 17.8 -2.6 16.5C-2.6 15.2 -2.1 14 -1.2 13.1C-0.3 12.2 0.9 11.7 2.2 11.7C2.9 11.7 3.6 11.9 4.2 12.2C4.4 12.3 4.6 12.4 4.8 12.5C4.9 12.5 5 12.6 5.1 12.6C5.4 12.8 5.7 13 6 13.3C6.1 13.3 6.2 13.4 6.3 13.5C6.5 13.3 6.7 13 6.8 12.8C6.9 12.6 6.9 12.4 7 12.2C6.7 11.7 6.3 11.3 5.8 11C5.7 10.9 5.6 10.8 5.5 10.8C4.9 10.4 4.2 10.2 3.5 9.1M8.8 11.2C9.9 10.7 10.7 9.9 11.2 8.8C11.7 7.7 11.8 6.5 11.5 5.3C11.2 4.2 10.4 3.3 9.3 2.9C8.2 2.4 7 2.4 5.8 2.9C4.7 3.4 3.9 4.2 3.4 5.3C2.9 6.4 2.9 7.6 3.2 8.8C3.5 9.9 4.3 10.8 5.4 11.2C6.4 11.7 7.7 11.7 8.8 11.2M6 14C5.6 13.6 5.2 13.3 4.8 13C4.7 13 4.6 12.9 4.5 12.9C4.2 12.7 3.9 12.5 3.6 12.4C3.5 12.4 3.4 12.3 3.3 12.3C2.9 12.1 2.6 12 2.2 12C1.3 12 0.4 12.4 -0.3 13.1C-0.9 13.7 -1.3 14.6 -1.3 15.5C-1.3 16.4 -0.9 17.2 -0.3 17.9C0.4 18.5 1.3 18.9 2.2 18.9C3.1 18.9 4 18.5 4.6 17.9C5.3 17.2 5.7 16.4 5.7 15.5C5.7 15.1 5.6 14.8 5.5 14.4C5.5 14.3 5.5 14.3 5.5 14.2C5.5 14.2 5.5 14.1 5.5 14.1C5.5 14.1 5.5 14 5.5 14C5.6 14 5.6 14 5.6 14C5.7 14 5.8 14 6 14Z" transform="translate(12, 12)"/></svg>
+            ),
+            react: (
+              <svg viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/><path d="M12 6c-3.309 0-6 2.691-6 6s2.691 6 6 6 6-2.691 6-6-2.691-6-6-6zm0 10c-2.206 0-4-1.794-4-4s1.794-4 4-4 4 1.794 4 4-1.794 4-4 4z"/><ellipse cx="12" cy="12" rx="4" ry="1.5" transform="rotate(-60 12 12)"/><ellipse cx="12" cy="12" rx="4" ry="1.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="4" ry="1.5"/></svg>
+            ),
+            csharp: (
+              <svg viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M14.29 5.45c-.38 0-.69.17-.89.53l-3.21 5.48-3.19-5.48c-.2-.36-.51-.53-.89-.53H2.86c-.53 0-.82.35-.63.82l4.1 7.12-4.1 7.12c-.19.47.1.82.63.82h3.25c.38 0 .69-.17.89-.53l3.19-5.48 3.21 5.48c.2.36.51.53.89.53h3.25c.53 0 .82-.35.63-.82l-4.1-7.12 4.1-7.12c.19-.47-.1-.82-.63-.82h-3.25zM21.5 21h-2.5V3h2.5v18z"/></svg>
+            ),
+          };
+          return icons[name] || null;
+        };
+
+        // --- Utility Functions ---
+        const parseHash = (hash) => {
+          const path = hash.substring(2) || 'welcome';
+          const parts = path.split('/');
+          if (parts[0] === 'project' && parts[1]) {
+            return { type: 'project', id: parts[1] };
+          }
+          const validPages = ['welcome', 'skills', 'leetcode', 'internships', 'education', 'about', 'contact', 'links', 'extensions'];
+          if (validPages.includes(parts[0])) {
+            return { type: parts[0] };
+          }
+          return { type: 'welcome' };
+        };
+
+        const getTabName = (route) => {
+          if (route.type === 'project') {
+            return portfolioData.projects[route.id]?.title || 'Not Found';
+          }
+          const names = {
+            'welcome': 'welcome.md',
+            'skills': 'skills.json',
+            'leetcode': 'dashboard.md',
+            'internships': 'internships_certs.md',
+            'education': 'education.md',
+            'about': 'about.md',
+            'contact': 'contact.me',
+            'links': 'links.md',
+            'extensions': 'youtube_podcast.md', // Added for extensions
+          };
+          return names[route.type] || 'welcome.md';
+        };
+
+        // --- Layout Components ---
+        const ActivityBar = ({ activeSidebar, onSidebarChange }) => {
+          const icons = [
+            { name: 'explorer', title: 'Explorer', icon: 'files' },
+            { name: 'skills', title: 'Skills', icon: 'skills' },
+            { name: 'leetcode', title: 'LeetCode', icon: 'leetcode' },
+            { name: 'experience', title: 'Experience', icon: 'experience' },
+            { name: 'education', title: 'Education', icon: 'education' },
+            { name: 'extensions', title: 'Extensions', icon: 'extensions' }, // Added extensions
+          ];
+
+          return (
+            <div className="w-12 h-full bg-[var(--vscode-activitybar)] flex flex-col items-center justify-between py-2 z-50">
+              <div className="flex flex-col items-center space-y-4">
+                {icons.map((icon) => (
+                  <button
+                    key={icon.name}
+                    title={icon.title}
+                    className="nav-icon relative p-2 rounded-lg"
+                    onClick={() => onSidebarChange(icon.name)}
+                  >
+                    {activeSidebar === icon.name && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-[var(--vscode-blue)]"></div>}
+                    <Icon
+                      name={icon.icon}
+                      className={`w-6 h-6 ${activeSidebar === icon.name ? 'text-white' : 'text-gray-400'}`}
+                    />
+                  </button>
+                ))}
+              </div>
+              <div className="flex flex-col items-center space-y-4">
+                <button
+                  title="About & Contact"
+                  className="nav-icon relative p-2 rounded-lg"
+                  onClick={() => onSidebarChange('profile')}
+                >
+                  {activeSidebar === 'profile' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-[var(--vscode-blue)]"></div>}
+                  <Icon
+                    name="account"
+                    className={`w-6 h-6 ${activeSidebar === 'profile' ? 'text-white' : 'text-gray-400'}`}
+                  />
+                </button>
+                <button
+                  title="Settings"
+                  className="nav-icon p-2 rounded-lg"
+                  onClick={() => {}}
+                >
+                  <Icon name="settings-gear" className="w-6 h-6 text-gray-400" />
+                </button>
+              </div>
+            </div>
+          );
+        };
+
+        const Sidebar = ({ activeSidebar }) => {
+          return (
+            <div className="w-64 h-full bg-[var(--vscode-sidebar)] border-r border-[var(--vscode-border)] flex-shrink-0 overflow-y-auto">
+              <div className="p-4 h-full">
+                <h2 className="text-xs font-bold uppercase text-gray-300 mb-4 px-2">{activeSidebar}</h2>
+                {activeSidebar === 'explorer' && <SidebarExplorer />}
+                {activeSidebar === 'skills' && <SidebarFile fileId="skills" fileName="skills.json" />}
+                {activeSidebar === 'leetcode' && <SidebarFile fileId="leetcode" fileName="dashboard.md" />}
+                {activeSidebar === 'experience' && <SidebarFile fileId="internships" fileName="internships_certs.md" />}
+                {activeSidebar === 'education' && <SidebarFile fileId="education" fileName="education.md" />}
+                {activeSidebar === 'profile' && <SidebarProfile />}
+                {activeSidebar === 'extensions' && <SidebarExtensions />}
+              </div>
+            </div>
+          );
+        };
+
+        const SidebarFile = ({ fileId, fileName, icon }) => (
+          <a href={`#/${fileId}`} className="file-item cursor-pointer text-gray-300 hover:text-white flex items-center px-2 py-0.5 rounded">
+            {icon && <Icon name={icon} className="w-4 h-4 mr-2" />}
+            {fileName}
+          </a>
+        );
+
+        const SidebarExplorer = () => {
+          const [isOpen, setIsOpen] = useState(true);
+          return (
+            <div className="space-y-2">
+              <button
+                className="text-sm font-semibold text-white cursor-pointer px-2 flex items-center w-full"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <Icon name="chevron-down" className={`w-4 h-4 mr-1 transition-transform ${isOpen ? 'rotate-0' : '-rotate-90'}`} />
+                PROJECTS
+              </button>
+              {isOpen && (
+                <div className="ml-4 space-y-1">
+                  {Object.values(portfolioData.projects).map((project) => (
+                    <a
+                      key={project.id}
+                      href={`#/project/${project.id}`}
+                      className="file-item cursor-pointer text-gray-300 hover:text-white flex items-center"
+                    >
+                      <Icon name={project.icon} className="w-4 h-4 mr-2" />
+                      {project.title}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        };
+        
+        // New Sidebar Component for Extensions
+        const SidebarExtensions = () => {
+          const [isOpen, setIsOpen] = useState(true);
+          return (
+            <div className="space-y-2">
+              <button
+                className="text-sm font-semibold text-white cursor-pointer px-2 flex items-center w-full"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <Icon name="chevron-down" className={`w-4 h-4 mr-1 transition-transform ${isOpen ? 'rotate-0' : '-rotate-90'}`} />
+                FAVORITES
+              </button>
+              {isOpen && (
+                <div className="ml-4 space-y-1">
+                  <a
+                    href="https://youtu.be/fCf2SCPI5X4?si=hFRiKRxGDk_RXqZV"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="file-item cursor-pointer text-gray-300 hover:text-white flex items-center px-2 py-0.5 rounded transition-colors hover:bg-[var(--vscode-list-hover-bg)]"
+                  >
+                    <Icon name="react" className="w-4 h-4 mr-2" />
+                    YouTube Podcast...
+                  </a>
+                </div>
+              )}
+            </div>
+          );
+        };
+
+
+        const SidebarProfile = () => (
+          <div className="space-y-1">
+            <SidebarFile fileId="about" fileName="about.md" />
+            <SidebarFile fileId="contact" fileName="contact.me" />
+            <SidebarFile fileId="links" fileName="links.md" />
+          </div>
+        );
+
+        // --- Main Content Components ---
+        const MainContentArea = ({ route }) => {
+          const renderContent = () => {
+            switch (route.type) {
+              case 'welcome': return <ContentWelcome />;
+              case 'about': return <ContentAbout />;
+              case 'contact': return <ContentContact />;
+              case 'links': return <ContentLinks />;
+              case 'skills': return <ContentSkills />;
+              case 'leetcode': return <ContentLeetCode />;
+              case 'education': return <ContentEducation />;
+              case 'internships': return <ContentInternships />;
+              case 'extensions': return <ContentExtensions />; // Added
+              case 'project':
+                const project = portfolioData.projects[route.id];
+                return project ? <ContentProject project={project} /> : <ContentNotFound />;
+              default: return <ContentWelcome />;
+            }
+          };
+          return (
+            <div className="flex-grow p-8 overflow-y-auto bg-[var(--vscode-bg)]">
+              {renderContent()}
+            </div>
+          );
+        };
+
+        const Tab = ({ route }) => {
+          const tabName = getTabName(route);
+          return (
+            <div className="flex bg-[var(--vscode-tab-inactive)] border-b border-[var(--vscode-border)]" id="tabs-container">
+              <div className="tab active-tab flex items-center bg-[var(--vscode-tab-active)] text-white py-2 px-4 border-r border-[var(--vscode-border)] cursor-pointer" data-target={route.type}>
+                {tabName}
+                <a href="#/welcome" className="tab-close ml-2 p-1 rounded hover:bg-[#444]">
+                  <Icon name="x" className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          );
+        };
+
+        const ContentWrapper = ({ title, children }) => (
+          <div className="editor-content max-w-4xl mx-auto">
+            <h1 className="text-3xl font-bold text-white mb-6">{title}</h1>
+            {children}
+          </div>
+        );
+
+        // --- Syntax Highlighting Components ---
+        const Punc = ({ children }) => <span className="text-white">{children}</span>;
+        const Key = ({ children }) => <span className="text-cyan-400">{children}</span>;
+        const Str = ({ children }) => <span className="text-orange-400">{children}</span>;
+        const Num = ({ children, className }) => <span className={className || "text-lime-300"}>{children}</span>;
+        const Comment = ({ children }) => <span className="text-green-600">{children}</span>;
+        const Keyword = ({ children }) => <span className="text-purple-400">{children}</span>;
+        const Link = ({ children, href }) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:underline"><Str>"{children}"</Str></a>;
+
+        const JsonDisplay = ({ data }) => (
+          <pre className="fira-code text-lg">
+            <Comment>{"// "}{getTabName(parseHash(window.location.hash))}</Comment>
+            {'\n'}<Punc>{"{"}</Punc>
+            {Object.entries(data).map(([key, value], i) => (
+              <React.Fragment key={key}>
+                {'\n  '}<Key>"{key}"</Key><Punc>: [</Punc>
+                {value.map((item, j) => (
+                  <React.Fragment key={item}>
+                    {'\n    '}<Str>"{item}"</Str><Punc>{j === value.length - 1 ? '' : ','}</Punc>
+                  </React.Fragment>
+                ))}
+                {'\n  '}<Punc>]{i === Object.keys(data).length - 1 ? '' : ','}</Punc>
+              </React.Fragment>
+            ))}
+            {'\n'}<Punc>{"}"}</Punc>
+          </pre>
+        );
+
+        const JsonDisplayLinks = ({ data }) => (
+         <pre className="fira-code text-lg">
+            {'\n'}<Punc>{"{"}</Punc>
+            {Object.entries(data).map(([key, value], i) => (
+              <React.Fragment key={key}>
+                {'\n  '}<Key>"{key}"</Key><Punc>: </Punc><Link href={value}>{value}</Link><Punc>{i === Object.keys(data).length - 1 ? '' : ','}</Punc>
+              </React.Fragment>
+            ))}
+            {'\n'}<Punc>{"}"}</Punc>
+          </pre>
+        );
+
+        const TechStackDisplay = ({ data }) => (
+          <pre className="fira-code text-sm p-4 bg-[var(--vscode-sidebar)] rounded-md border border-[var(--vscode-border)]">
+            <Punc>{"{"}</Punc>
+            {Object.entries(data).map(([key, value], i) => (
+              <React.Fragment key={key}>
+                {'\n  '}<Key>"{key}"</Key><Punc>: </Punc><Str>"{value}"</Str><Punc>{i === Object.keys(data).length - 1 ? '' : ','}</Punc>
+              </React.Fragment>
+            ))}
+            {'\n'}<Punc>{"}"}</Punc>
+          </pre>
+        );
+
+        // --- Page Content Components ---
+        const ContentWelcome = () => (
+          <ContentWrapper title="Welcome to my portfolio.">
+            <p className="text-lg text-gray-300 mb-4">I'm Aniruddha Anil Ghatage, a Computer Science student specializing in AI & ML.</p>
+            <p className="text-gray-300">Use the icons on the left to explore my projects, skills, and more.</p>
+          </ContentWrapper>
+        );
+
+        const ContentAbout = () => (
+          <ContentWrapper title="/ about.md">
+            <div className="space-y-4 text-lg text-gray-200">
+              <img 
+                src="Aniruddha.png" 
+                alt="Aniruddha Ghatage" 
+                className="float-right ml-6 mb-4 rounded-full border-2 border-[var(--vscode-border)]"
+              />
+              <p>Hello! I'm a final-year Computer Science student at DY Patil College of Engineering, specializing in AI, Machine Learning, and Full-Stack Development.</p>
+              <p>I'm passionate about developing practical, end-to-end solutions. My work ranges from building high-accuracy ML models for fraud detection to creating complete web platforms that connect mentors and mentees.</p>
+              <p>Beyond coding, I'm actively involved in my college community as the Chief Student Coordinator for the Training & Placement cell, a member of the Google Developers Student Group (GDSC), and a member of the Student Council for this year.</p>
+            </div>
+          </ContentWrapper>
+        );
+
+        const ContentContact = () => (
+          <ContentWrapper title="/ contact.me">
+            <pre className="fira-code text-lg">
+              {'\n'}<Keyword>const</Keyword> <Key>contactInfo</Key> <Punc>=</Punc> <Punc>{"{"}</Punc>
+              {'\n  '}<Key>Email</Key><Punc>: </Punc><a href={`mailto:${portfolioData.contact.email}?subject=Portfolio%20Contact&body=Hello%20Aniruddha,`} className="text-orange-400 hover:underline"><Str>"{portfolioData.contact.email}"</Str></a><Punc>,</Punc>
+              {'\n  '}<Key>Phone</Key><Punc>: </Punc><Str>"{portfolioData.contact.phone}"</Str>
+              {'\n'}<Punc>{"}"}</Punc>
+            </pre>
+          </ContentWrapper>
+        );
+
+        const ContentLinks = () => (
+          <ContentWrapper title="/ links.md">
+            <JsonDisplayLinks data={portfolioData.links} />
+          </ContentWrapper>
+        );
+
+        const ContentSkills = () => (
+          <ContentWrapper title="">
+            <JsonDisplay data={portfolioData.skills} />
+          </ContentWrapper>
+        );
+
+        const ContentEducation = () => (
+          <ContentWrapper title="/ education.md">
+            <div className="space-y-6 text-lg">
+              {portfolioData.education.map((edu) => (
+                <div key={edu.degree}>
+                  <h2 className="text-xl font-semibold text-[var(--vscode-blue)]">{edu.degree}</h2>
+                  <p className="text-gray-200">{edu.institution}</p>
+                  <p className="text-gray-300"><Comment>// Focus: {edu.focus}</Comment></p>
+                  <p className="text-gray-300"><Comment>// {edu.details}</Comment></p>
+                </div>
+              ))}
+            </div>
+          </ContentWrapper>
+        );
+
+        const ContentInternships = () => (
+          <ContentWrapper title="/ internships_certs.md">
+            <div className="space-y-6 text-lg">
+              <div>
+                <h2 className="text-xl font-semibold text-[var(--vscode-blue)]"># Internships</h2>
+                <ul className="list-disc list-inside text-gray-200 ml-4">
+                  {portfolioData.experience.internships.map((item) => <li key={item}><Str>"{item}"</Str></li>)}
+                </ul>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-[var(--vscode-blue)]"># Certifications</h2>
+                <ul className="list-disc list-inside text-gray-200 ml-4">
+                  {portfolioData.experience.certifications.map((item) => <li key={item}><Str>"{item}"</Str></li>)}
+                </ul>
+              </div>
+            </div>
+          </ContentWrapper>
+        );
+        
+        // New Content Page for Extensions
+        const ContentExtensions = () => (
+          <ContentWrapper title="/ youtube_podcast.md">
+            <pre className="fira-code text-lg">
+              {'\n'}<Keyword>const</Keyword> <Key>FavoritePodcast</Key> <Punc>=</Punc> <Punc>{"{"}</Punc>
+              {'\n  '}<Key>title</Key><Punc>: </Punc><Str>"YouTube Podcast..."</Str><Punc>,</Punc>
+              {'\n  '}<Key>url</Key><Punc>: </Punc><Link href="https://youtu.be/fCf2SCPI5X4?si=hFRiKRxGDk_RXqZV">"https://youtu.be/fCf2SCPI5X4?si=hFRiKRxGDk_RXqZV"</Link>
+              {'\n'}<Punc>{"}"}</Punc>
+            </pre>
+          </ContentWrapper>
+        );
+
+
+        const ContentProject = ({ project }) => (
+          <ContentWrapper title={`/ ${project.title}`}>
+            <div className="fira-code">
+              <p className="text-xl mb-4"><Comment>/* {project.name} */</Comment></p>
+              <p className="text-lg text-gray-200 mb-6"><Comment>{project.description}</Comment></p>
+              
+              {project.appUrl && (
+                <div className="mb-6 fira-code text-lg">
+                  <Key>"Live_Application"</Key><Punc>: </Punc><Link href={project.appUrl}>{project.appUrl}</Link>
+                </div>
+              )}
+
+              {project.features && (
+                <>
+                  <h3 className="text-lg font-semibold text-[var(--vscode-blue)] mb-2"># Key Features</h3>
+                  <div className="text-gray-200 space-y-2 mb-6">
+                    {project.features.map((feature) => (
+                      <p key={typeof feature === 'string' ? feature : feature.name}>
+                        <Comment>// </Comment>
+                        {typeof feature === 'string' ? feature : (
+                          <>
+                            <span className="font-semibold">{feature.name}:</span> {feature.detail}
+                          </>
+                        )}
+                      </p>
+                    ))}
+                  </div>
+                </>
+              )}
+              
+              <h3 className="text-lg font-semibold text-[var(--vscode-blue)] mb-2"># Tech Stack</h3>
+              <TechStackDisplay data={project.techStack} />
+            </div>
+          </ContentWrapper>
+        );
+
+        const ContentLeetCode = () => {
+          // Use static data as initial fallback
+          const [leetcodeStats, setLeetcodeStats] = useState(portfolioData.leetcode);
+          const [isLoading, setIsLoading] = useState(true);
+          const [error, setError] = useState(null);
+
+          useEffect(() => {
+            const fetchLeetCodeStats = async () => {
+              setIsLoading(true);
+              try {
+                const response = await fetch('https://alfa-leetcode-api.onrender.com/AniruddhaLeet');
+                if (!response.ok) {
+                  throw new Error(`API Error: ${response.statusText}`);
+                }
+                const data = await response.json();
+                
+                // Map the API data to our portfolioData structure
+                // FIXED: Added nullish coalescing (??) to fall back to static data if API returns null/undefined
+                // FIXED: Corrected data.contestParticipated to data.contestAttended
+                const mappedData = {
+                  totalSolved: data.totalSolved ?? portfolioData.leetcode.totalSolved,
+                  rating: Math.floor(data.contestRating) || portfolioData.leetcode.rating, // || is fine here, rating won't be 0
+                  easy: data.easySolved ?? portfolioData.leetcode.easy,
+                  medium: data.mediumSolved ?? portfolioData.leetcode.medium,
+                  hard: data.hardSolved ?? portfolioData.leetcode.hard,
+                  contests: data.contestAttended ?? portfolioData.leetcode.contests,
+                  profileUrl: portfolioData.leetcode.profileUrl, // Keep original URL
+                };
+                setLeetcodeStats(mappedData);
+                setError(null);
+              } catch (err) {
+                console.error("Failed to fetch LeetCode stats:", err);
+                setError(err.message);
+                // On error, we just keep the static data (which is already set in useState)
+              } finally {
+                setIsLoading(false);
+              }
+            };
+
+            fetchLeetCodeStats();
+          }, []); // Empty dependency array means this runs once on mount
+
+          const { leetcode } = portfolioData; // For fallback URL
+          const NumDisplay = ({ children, className }) => <Num className={className}>{children}</Num>;
+
+          return (
+            <ContentWrapper title="/ leetcode_dashboard.md">
+              <p className="text-lg text-gray-300 mb-6 fira-code">
+                <Key>"Profile"</Key><Punc>: </Punc><a href={leetcode.profileUrl} target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:underline"><Str>"{leetcode.profileUrl.replace('https://', '')}"</Str></a>
+              </p>
+
+              {/* Loading/Error State */}
+              <div className="h-6 text-center mb-2">
+                {isLoading && <p className="text-lg text-gray-400 animate-pulse">Loading live LeetCode stats...</p>}
+                {error && !isLoading && <p className="text-lg text-red-400">Failed to load live stats. Displaying static data.</p>}
+                {!isLoading && !error && <p className="text-lg text-green-500">Live LeetCode stats loaded!</p>}
+              </div>
+
+              <div className="grid grid-cols-3 lg:grid-cols-6 gap-4 text-center my-8">
+                <StatCard label="Total Solved" value={<NumDisplay>{leetcodeStats.totalSolved}</NumDisplay>} />
+                <StatCard label="Rating" value={<NumDisplay>{leetcodeStats.rating}</NumDisplay>} />
+                <StatCard label="Easy" value={<NumDisplay className="text-lime-300">{leetcodeStats.easy}</NumDisplay>} />
+                <StatCard label="Medium" value={<NumDisplay className="text-yellow-300">{leetcodeStats.medium}</NumDisplay>} />
+                <StatCard label="Hard" value={<NumDisplay className="text-red-400">{leetcodeStats.hard}</NumDisplay>} />
+                <StatCard label="Contests" value={<NumDisplay>{leetcodeStats.contests}</NumDisplay>} />
+              </div>
+              <h3 className="text-lg font-semibold text-center text-gray-300 mb-4">Activity Heatmap (Static)</h3>
+              <LeetCodeHeatmap />
+            </ContentWrapper>
+          );
+        };
+
+
+        const StatCard = ({ label, value }) => (
+          <div className="bg-[var(--vscode-sidebar)] p-3 border border-[var(--vscode-border)] rounded-md">
+            <div className="text-3xl font-bold">{value}</div>
+            <p className="text-xs">{label}</p>
+          </div>
+        );
+
+        const LeetCodeHeatmap = () => {
+          const cells = useMemo(() => {
+            const totalCells = 7 * 26;
+            return Array.from({ length: totalCells }, () => {
+              let level = Math.floor(Math.random() * 5);
+              level = (Math.random() < 0.4) ? 0 : level;
+              const colors = ['bg-[#222222]', 'bg-[#006d2c]', 'bg-[#238b45]', 'bg-[#41ab5d]', 'bg-[#74c476]'];
+              return colors[level];
+            });
+          }, []);
+
+          return (
+            <div className="max-w-xl mx-auto grid grid-cols-26 gap-1">
+              {cells.map((colorClass, i) => (
+                <div key={i} className={`w-full pt-[100%] ${colorClass} rounded-sm`} title="date"></div>
+              ))}
+            </div>
+          );
+        };
+
+        const ContentNotFound = () => (
+          <ContentWrapper title="/ 404.md">
+            <p className="text-lg text-gray-400"><Comment>// File not found. Please select a file from the explorer.</Comment></p>
+          </ContentWrapper>
+        );
+
+        // --- Main App Component ---
+        function App() {
+          const [activeSidebar, setActiveSidebar] = useState('explorer');
+          const [route, setRoute] = useState(parseHash(window.location.hash));
+
+          useEffect(() => {
+            const handleHashChange = () => {
+              setRoute(parseHash(window.location.hash));
+            };
+            window.addEventListener('hashchange', handleHashChange);
+            return () => window.removeEventListener('hashchange', handleHashChange);
+          }, []);
+          
+          const vsCodeStyle = {
+             // CSS variables are now in the <head><style> tag
+          };
+
+          return (
+            <div 
+              className="bg-[var(--vscode-bg)] text-[var(--vscode-text)] h-screen flex"
+              style={vsCodeStyle}
+            >
+              <ActivityBar 
+                activeSidebar={activeSidebar} 
+                onSidebarChange={setActiveSidebar} 
+              />
+              <Sidebar activeSidebar={activeSidebar} />
+              <div className="flex-grow h-full flex flex-col overflow-hidden">
+                <Tab route={route} />
+                <MainContentArea route={route} />
+              </div>
+            </div>
+          );
+        }
+
+        // --- 7. Mount the React App ---
+        // This is the magic line that starts everything
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);
+
+    </script>
+</body>
+</html>
+
